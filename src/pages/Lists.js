@@ -1,9 +1,9 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { Link, useNavigate } from 'react-router-dom';
 // import useDataFetching from '../hooks/useDataFetching';
 import NavBar from '../components/NavBar/NavBar';
-import ListsContext from '../context/ListContext';
+import ListsContext from '../context/ListsContext';
 
 
 const ListWrapper = styled.div`
@@ -33,8 +33,12 @@ const Title = styled.h3`
 const Lists = () => {
   let navigate = useNavigate();
 
-  const { loading, error, lists } = useContext(ListsContext);
+  const { loading, error, lists, fetchLists } = useContext(ListsContext);
 
+  // only call when lists not yet retrieved
+  useEffect(() => {
+    !lists.length && fetchLists()
+  }, [ fetchLists, lists ])
   return (
     <>
       {navigate && <NavBar title='Your Lists' />}
